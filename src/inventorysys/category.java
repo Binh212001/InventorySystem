@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package inventorysys;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -10,6 +11,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
 /**
  *
  * @author hi
@@ -24,12 +27,10 @@ public class category extends javax.swing.JFrame {
         fetchCategory();
     }
 
-    
-       Connection Conn = null;
+    Connection Conn = null;
     Statement St = null;
     ResultSet Rs = null;
-    
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -90,6 +91,11 @@ public class category extends javax.swing.JFrame {
         });
 
         jButton2.setText("Delete");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         CatId.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -171,6 +177,11 @@ public class category extends javax.swing.JFrame {
                 "ID", "Name"
             }
         ));
+        CatTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                CatTableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(CatTable);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -224,23 +235,23 @@ public class category extends javax.swing.JFrame {
     }//GEN-LAST:event_CatNameActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if(CatId.getText().trim().length() >0  && CatName.getText().trim().length()>0){
-            
-             String connectionUrl = "jdbc:sqlserver://LAPTOP-HA4J8OLV\\SQLEXPRESS01:8081;encrypt=true;trustServerCertificate=true;databaseName=Inventory;user=sa;password=123456";
+        if (CatId.getText().trim().length() > 0 && CatName.getText().trim().length() > 0) {
+   UrlDatabase db = new UrlDatabase();
+        String connectionUrl = db.getUrl();
             try {
-                String query = "insert into category(id , categoryName) values  ('"+CatId.getText()+"','"+CatName.getText()+"')";
-                 Conn = DriverManager.getConnection(connectionUrl);
-                 St = Conn.createStatement();
-                 St.executeUpdate(query);
-                 St.close();
-                 JOptionPane.showMessageDialog(this, "Saved");
-                 new category().setVisible(true);
-                 this.dispose();
-                
+                String query = "insert into category(id , categoryName) values  ('" + CatId.getText() + "','" + CatName.getText() + "')";
+                Conn = DriverManager.getConnection(connectionUrl);
+                St = Conn.createStatement();
+                St.executeUpdate(query);
+                St.close();
+                JOptionPane.showMessageDialog(this, "Saved");
+                new category().setVisible(true);
+                this.dispose();
+
             } catch (SQLException e) {
                 JOptionPane.showConfirmDialog(this, "Category is existing");
             }
-        }else{
+        } else {
             JOptionPane.showMessageDialog(this, "Missing field");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -251,12 +262,44 @@ public class category extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    
-    
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+         UrlDatabase db = new UrlDatabase();
+        String connectionUrl = db.getUrl();
+        try {
+            Conn = DriverManager.getConnection(connectionUrl);
+            St = Conn.createStatement();
+            if(CatId.getText().trim().length()>0){
+                
+            String query = "delete from category where id = '"+CatId.getText()+"'";
+                System.err.println("qeur:" + query);
+            
+            St.executeUpdate(query);
+            JOptionPane.showMessageDialog(this, "delete Successfully");
+            new category().setVisible(true);
+            this.dispose();
+            }else{
+            JOptionPane.showConfirmDialog(this, "Please choose category");
+            }
+            
+
+        } catch (SQLException e) {
+            JOptionPane.showConfirmDialog(this, "Please choose category ");
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void CatTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CatTableMouseClicked
+       int index = CatTable.getSelectedRow();
+        TableModel moldel = CatTable.getModel();
+        String value1 = moldel.getValueAt(index, 0).toString();
+        String value2 = moldel.getValueAt(index, 1).toString();
+        CatId.setText(value1);
+        CatName.setText(value2);
+    }//GEN-LAST:event_CatTableMouseClicked
+
     public final void fetchCategory() {
         // Create a variable for the connection string.
-        String connectionUrl = "jdbc:sqlserver://LAPTOP-HA4J8OLV\\SQLEXPRESS01:8081;encrypt=true;trustServerCertificate=true;databaseName=Inventory;user=sa;password=123456";
-
+          UrlDatabase db = new UrlDatabase();
+        String connectionUrl = db.getUrl();
         try {
             Conn = DriverManager.getConnection(connectionUrl);
             St = Conn.createStatement();
@@ -265,7 +308,7 @@ public class category extends javax.swing.JFrame {
             while (Rs.next()) {
                 String ID = Rs.getString("id");
                 String Name = Rs.getString("CategoryName");
-             
+
                 Object[] row = {ID, Name};
 
                 DefaultTableModel model = (DefaultTableModel) CatTable.getModel();
@@ -278,6 +321,7 @@ public class category extends javax.swing.JFrame {
         }
 
     }
+
     /**
      * @param args the command line arguments
      */

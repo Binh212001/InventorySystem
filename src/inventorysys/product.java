@@ -146,6 +146,11 @@ public final class product extends javax.swing.JFrame {
                 jButton5MouseClicked(evt);
             }
         });
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jButton1.setText("Expried");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -297,8 +302,8 @@ public final class product extends javax.swing.JFrame {
 
     public void fetchProduct() {
         // Create a variable for the connection string.
-        String connectionUrl = "jdbc:sqlserver://LAPTOP-HA4J8OLV\\SQLEXPRESS01:8081;encrypt=true;trustServerCertificate=true;databaseName=Inventory;user=sa;password=123456";
-
+         UrlDatabase db = new UrlDatabase();
+        String connectionUrl = db.getUrl();
         try {
             Conn = DriverManager.getConnection(connectionUrl);
             St = Conn.createStatement();
@@ -324,9 +329,8 @@ public final class product extends javax.swing.JFrame {
     }
 
     public void fetchCategory() {
-        // Create a variable for the connection string.
-        String connectionUrl = "jdbc:sqlserver://LAPTOP-HA4J8OLV\\SQLEXPRESS01:8081;encrypt=true;trustServerCertificate=true;databaseName=Inventory;user=sa;password=123456";
-
+      UrlDatabase db = new UrlDatabase();
+        String connectionUrl = db.getUrl();
         try {
             Conn = DriverManager.getConnection(connectionUrl);
             St = Conn.createStatement();
@@ -373,8 +377,8 @@ public final class product extends javax.swing.JFrame {
 
     private void AddProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddProductActionPerformed
 
-        String connectionUrl = "jdbc:sqlserver://LAPTOP-HA4J8OLV\\SQLEXPRESS01:8081;encrypt=true;trustServerCertificate=true;databaseName=Inventory;user=sa;password=123456";
-
+        UrlDatabase db = new UrlDatabase();
+        String connectionUrl = db.getUrl();
         try {
             Conn = DriverManager.getConnection(connectionUrl);
             St = Conn.createStatement();
@@ -441,7 +445,8 @@ public final class product extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        String connectionUrl = "jdbc:sqlserver://LAPTOP-HA4J8OLV\\SQLEXPRESS01:8081;encrypt=true;trustServerCertificate=true;databaseName=Inventory;user=sa;password=123456";
+         UrlDatabase db = new UrlDatabase();
+        String connectionUrl = db.getUrl();
         try {
             Conn = DriverManager.getConnection(connectionUrl);
             St = Conn.createStatement();
@@ -470,6 +475,10 @@ public final class product extends javax.swing.JFrame {
          JOptionPane.showMessageDialog(this,"product is not Exsiitng");
         }
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments
